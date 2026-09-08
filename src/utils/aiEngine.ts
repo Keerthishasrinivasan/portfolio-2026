@@ -12,7 +12,7 @@ interface AIResponse {
 }
 
 const SYSTEM_CONTEXT = `
-You are Keerthisha AI, a dedicated intelligent assistant for Keerthisha S.'s portfolio.
+You are Keerthisha AI, a dedicated intelligent assistant for Keerthisha Srinivasan's portfolio.
 Answer questions strictly based on the following verified facts:
 
 Candidate: ${PORTFOLIO_DATA.personal.name}
@@ -119,7 +119,7 @@ function getLocalResponse(q: string): AIResponse {
     q.includes('introduction')
   ) {
     return {
-      answer: `**Keerthisha S.** is a dedicated B.Tech Information Technology undergraduate at **Adithya Institute of Technology** (2023–2027) based in Coimbatore, Tamil Nadu. 
+      answer: `**Keerthisha Srinivasan** is a dedicated B.Tech Information Technology undergraduate at **Adithya Institute of Technology** (2023–2027) based in Coimbatore, Tamil Nadu. 
 
 She specializes as a **Full-Stack AI Developer** and **AI Solution Builder**, combining modern full-stack web architectures (React, Flask, Python, SQL) with on-device machine learning (TensorFlow Lite, ML Kit). She has built impactful solutions like **Lumiable** (AI accessibility platform) and was a finalist at the **National Level AWS Hackathon** and **Larsen & Toubro Hackathon**.`,
       suggestedFollowUps: [
@@ -342,7 +342,7 @@ She is actively open to full-stack engineering roles, AI internships, and innova
 
   // 10. Default fallback
   return {
-    answer: `Keerthisha S. is a B.Tech Information Technology student at Adithya Institute of Technology (2023–2027) and an aspiring **Full-Stack AI Developer**.
+    answer: `Keerthisha Srinivasan is a B.Tech Information Technology student at Adithya Institute of Technology (2023–2027) and an aspiring **Full-Stack AI Developer**.
 
 Her core focus areas are **Python, React.js, Flask, SQL, and Edge AI (TensorFlow Lite & ML Kit)**. She has built **Lumiable** (an AI accessibility platform) and was a finalist in the national **AWS Hackathon** and **Larsen & Toubro Hackathon**.
 

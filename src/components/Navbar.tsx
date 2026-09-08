@@ -67,8 +67,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenRecruiter }
             K
           </div>
           <div>
-            <span className="font-mono text-sm font-bold tracking-wider text-white group-hover:text-cyan-400 transition-colors">
-              KEERTHISHA S.
+            <span className="font-mono text-xs sm:text-sm font-bold tracking-wider text-white group-hover:text-cyan-400 transition-colors">
+              KEERTHISHA SRINIVASAN
             </span>
             <span className="hidden sm:block text-[10px] font-mono text-slate-400 tracking-widest">
               FULL-STACK AI

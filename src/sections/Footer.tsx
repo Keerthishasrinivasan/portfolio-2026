@@ -95,7 +95,7 @@ export const Footer: React.FC = () => {
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
           <div>
-            © {new Date().getFullYear()} Keerthisha S. All rights reserved.
+            © {new Date().getFullYear()} Keerthisha Srinivasan. All rights reserved.
           </div>
           <div className="flex items-center gap-2 text-cyan-400/80">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />

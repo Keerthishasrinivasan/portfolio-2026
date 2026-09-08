@@ -37,6 +37,11 @@ export interface Achievement {
   category: 'Hackathon' | 'Technical Competition';
   description: string;
   iconName: 'trophy' | 'award' | 'zap';
+  photos?: {
+    url: string;
+    caption: string;
+    event: string;
+  }[];
 }
 
 export interface SkillNode {
@@ -50,7 +55,7 @@ export interface SkillNode {
 
 export const PORTFOLIO_DATA = {
   personal: {
-    name: 'Keerthisha S.',
+    name: 'Keerthisha Srinivasan',
     title: 'Full-Stack AI Developer',
     roles: [
       'FULL-STACK AI DEVELOPER',
@@ -353,6 +358,38 @@ export const PORTFOLIO_DATA = {
 
   achievements: [
     {
+      id: 'tech-seminars',
+      title: 'Paper Presentation & Technical Seminars',
+      stage: 'Multiple Top Prizes',
+      location: 'Tamil Nadu, India',
+      category: 'Technical Competition',
+      description:
+        'Presented research on "Drug Trafficking Detection on Social Media" and emerging computational paradigms at inter-collegiate symposiums including UTHRA Fest (United Institute of Technology & Dept of IT), earning multiple top honors.',
+      iconName: 'award',
+      photos: [
+        {
+          url: '/achievements/stage_award_ceremony.jpg',
+          caption: 'Receiving Award on Stage at United Institute of Technology (UTHRA Fest)',
+          event: 'UTHRA Inter-College Techno-Cultural Fest',
+        },
+        {
+          url: '/achievements/uthra_paper_presentation.jpg',
+          caption: 'Delivering Technical Paper Presentation on "Drug Trafficking on Social Media"',
+          event: 'UTHRA Paper Presentation Competition',
+        },
+        {
+          url: '/achievements/presentation_evaluation.jpg',
+          caption: 'Live Jury & Evaluator Technical Defense of Social Media Trace Analysis',
+          event: 'Department of Information Technology Symposium',
+        },
+        {
+          url: '/achievements/certificate_handover.jpg',
+          caption: 'Stage Felicitation and Certificate of Achievement Handover',
+          event: 'Inter-Collegiate Technical Awards',
+        },
+      ],
+    },
+    {
       id: 'aws-hackathon',
       title: 'National Level AWS Hackathon',
       stage: 'Finalist',
@@ -371,16 +408,6 @@ export const PORTFOLIO_DATA = {
       description:
         'Selected as a Finalist in Chennai for conceptualizing and prototyping innovative engineering solutions for industrial technology challenges.',
       iconName: 'zap',
-    },
-    {
-      id: 'tech-seminars',
-      title: 'Paper Presentation & Technical Seminars',
-      stage: 'Multiple Top Prizes',
-      location: 'Tamil Nadu, India',
-      category: 'Technical Competition',
-      description:
-        'Presented research papers on emerging computational technologies and software paradigms, earning top honors across collegiate symposiums.',
-      iconName: 'award',
     },
   ] as Achievement[],
 

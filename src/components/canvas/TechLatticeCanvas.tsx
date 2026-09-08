@@ -159,7 +159,7 @@ export const TechLatticeCanvas: React.FC = () => {
 
       // Center core
       ctx.beginPath();
-      ctx.arc(curCenterX, curCenterY, 32, 0, Math.PI * 2);
+      ctx.arc(curCenterX, curCenterY, 36, 0, Math.PI * 2);
       ctx.fillStyle = '#090d16';
       ctx.fill();
       ctx.strokeStyle = '#38bdf8';
@@ -168,13 +168,14 @@ export const TechLatticeCanvas: React.FC = () => {
 
       // Center text
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 10px "Space Grotesk", sans-serif';
+      ctx.font = 'bold 9px "Space Grotesk", sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('KEERTHISHA', curCenterX, curCenterY - 4);
-      ctx.font = '8px "JetBrains Mono", monospace';
+      ctx.fillText('KEERTHISHA', curCenterX, curCenterY - 9);
+      ctx.fillText('SRINIVASAN', curCenterX, curCenterY + 2);
+      ctx.font = '7px "JetBrains Mono", monospace';
       ctx.fillStyle = '#38bdf8';
-      ctx.fillText('AI CORE', curCenterX, curCenterY + 8);
+      ctx.fillText('AI CORE', curCenterX, curCenterY + 14);
 
       // Draw surrounding nodes
       nodes.forEach((node) => {

@@ -73,8 +73,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreWork, onOpenR
             <div className="text-xs sm:text-sm font-mono tracking-widest text-slate-400 uppercase">
               PORTFOLIO OF
             </div>
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white font-mono">
-              KEERTHISHA S.
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white font-mono">
+              KEERTHISHA SRINIVASAN
             </h1>
           </div>
 
