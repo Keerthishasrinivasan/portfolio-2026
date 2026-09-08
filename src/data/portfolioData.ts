@@ -78,7 +78,7 @@ export const PORTFOLIO_DATA = {
     email: 'keerthishasrini@gmail.com',
     phone: '+91 9080435529',
     linkedin: 'https://www.linkedin.com/in/keerthisha-srinivasan-573939305/',
-    github: 'https://github.com/keerthisha',
+    github: 'https://github.com/Keerthishasrinivasan',
     resumePdf: '/Keerthisha_Resume.pdf',
     availability: 'Available for Summer Internships & Full-Stack AI Roles',
   },
@@ -260,8 +260,8 @@ export const PORTFOLIO_DATA = {
       ],
       contribution:
         'Architected the core SeeSphere perception pipeline, integrated TensorFlow Lite models for high-frame-rate mobile inference, designed the spatial audio feedback cues, and connected geolocation tracking for emergency safety triggers.',
-      githubUrl: 'https://github.com/keerthisha',
-      demoUrl: 'https://github.com/keerthisha',
+      githubUrl: 'https://github.com/Keerthishasrinivasan/portfolio-2026',
+      demoUrl: 'https://github.com/Keerthishasrinivasan/portfolio-2026',
     },
     {
       id: 'placement-management',
@@ -297,8 +297,8 @@ export const PORTFOLIO_DATA = {
       ],
       contribution:
         'Designed relational SQL schemas for candidates, recruiters, and application states; developed Flask backend endpoints and authentication workflows; built the interactive metrics dashboard for placement officers.',
-      githubUrl: 'https://github.com/keerthisha',
-      demoUrl: 'https://github.com/keerthisha',
+      githubUrl: 'https://github.com/Keerthishasrinivasan/portfolio-2026',
+      demoUrl: 'https://github.com/Keerthishasrinivasan/portfolio-2026',
     },
     {
       id: 'blood-donor-finder',
@@ -334,8 +334,8 @@ export const PORTFOLIO_DATA = {
       ],
       contribution:
         'Engineered the core SQL matching query engine for blood compatibility, built the hospital request alert module, implemented secure donor account management, and ensured cross-device responsiveness.',
-      githubUrl: 'https://github.com/keerthisha',
-      demoUrl: 'https://github.com/keerthisha',
+      githubUrl: 'https://github.com/Keerthishasrinivasan/portfolio-2026',
+      demoUrl: 'https://github.com/Keerthishasrinivasan/portfolio-2026',
     },
   ] as Project[],
 

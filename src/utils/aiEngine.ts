@@ -325,7 +325,7 @@ She focuses on practical application rather than theoretical syntax, deploying t
 
 • **Email:** [keerthishasrini@gmail.com](mailto:keerthishasrini@gmail.com)  
 • **LinkedIn:** [linkedin.com/in/keerthisha-srinivasan-573939305](https://www.linkedin.com/in/keerthisha-srinivasan-573939305/)  
-• **GitHub:** [github.com/keerthisha](https://github.com/keerthisha)  
+• **GitHub:** [github.com/Keerthishasrinivasan](https://github.com/Keerthishasrinivasan)  
 • **Location:** Coimbatore, Tamil Nadu, India  
 
 She is actively open to full-stack engineering roles, AI internships, and innovative collaborative ventures!`,
