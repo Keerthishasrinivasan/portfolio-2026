@@ -74,6 +74,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreWork, onOpenR
             <span>Adithya Institute of Technology • B.Tech IT 2023–2027</span>
           </div>
 
+          {/* Mobile Profile Photo Spotlight (visible on mobile / small devices) */}
+          <div className="lg:hidden flex flex-col items-center pt-2">
+            <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden border-2 border-cyan-400/60 shadow-[0_0_25px_rgba(56,189,248,0.45)] bg-slate-950">
+              <img
+                src={getAssetUrl(PORTFOLIO_DATA.personal.profileImage || '')}
+                alt={PORTFOLIO_DATA.personal.name}
+                loading="eager"
+                className="w-full h-full object-cover object-top"
+              />
+              <span className="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-900" />
+            </div>
+            <div className="mt-2.5 inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-[10px] font-mono">
+              <Sparkles className="w-3 h-3" />
+              <span>Full-Stack AI Developer</span>
+            </div>
+          </div>
+
           {/* Name Display */}
           <div className="space-y-1">
             <div className="text-xs sm:text-sm font-mono tracking-widest text-slate-400 uppercase">
@@ -218,6 +235,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreWork, onOpenR
                   <img
                     src={getAssetUrl(PORTFOLIO_DATA.personal.profileImage || '')}
                     alt={PORTFOLIO_DATA.personal.name}
+                    loading="eager"
                     className="w-full h-full object-cover object-top filter contrast-105 group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#04060a] via-[#04060a]/30 to-transparent opacity-90" />
