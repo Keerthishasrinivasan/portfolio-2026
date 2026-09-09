@@ -80,6 +80,7 @@ export const PORTFOLIO_DATA = {
     linkedin: 'https://www.linkedin.com/in/keerthisha-srinivasan-573939305/',
     github: 'https://github.com/Keerthishasrinivasan',
     resumePdf: '/Keerthisha_Resume.pdf',
+    profileImage: '/profile/keerthisha_profile.jpg',
     availability: 'Available for Summer Internships & Full-Stack AI Roles',
   },
 

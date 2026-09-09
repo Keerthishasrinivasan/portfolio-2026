@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PORTFOLIO_DATA } from '@/data/portfolioData';
+import { getAssetUrl } from '@/utils/assets';
 import { Menu, X, Briefcase, FileText, Sparkles } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
@@ -58,13 +59,17 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenRecruiter }
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Brand / Name Logo */}
+        {/* Brand / Name Logo with Professional Avatar */}
         <button
           onClick={() => scrollToSection('intro')}
-          className="group flex items-center gap-2.5 text-left focus:outline-none"
+          className="group flex items-center gap-3 text-left focus:outline-none"
         >
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center font-mono font-bold text-black text-sm shadow-[0_0_15px_rgba(56,189,248,0.4)] group-hover:scale-105 transition-transform">
-            K
+          <div className="relative w-9 h-9 rounded-full overflow-hidden border border-cyan-400/40 shadow-[0_0_14px_rgba(56,189,248,0.35)] group-hover:scale-105 transition-transform shrink-0 bg-slate-900">
+            <img
+              src={getAssetUrl(PORTFOLIO_DATA.personal.profileImage || '')}
+              alt={PORTFOLIO_DATA.personal.name}
+              className="w-full h-full object-cover object-top"
+            />
           </div>
           <div>
             <span className="font-mono text-xs sm:text-sm font-bold tracking-wider text-white group-hover:text-cyan-400 transition-colors">
@@ -108,7 +113,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenRecruiter }
           </button>
 
           <a
-            href={PORTFOLIO_DATA.personal.resumePdf}
+            href={getAssetUrl(PORTFOLIO_DATA.personal.resumePdf)}
             download="Keerthisha_Resume.pdf"
             className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-white/10 text-slate-300 text-xs font-mono hover:text-white hover:border-slate-500 transition-colors"
           >
@@ -159,7 +164,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenRecruiter }
               <span>OPEN RECRUITER VIEW</span>
             </button>
             <a
-              href={PORTFOLIO_DATA.personal.resumePdf}
+              href={getAssetUrl(PORTFOLIO_DATA.personal.resumePdf)}
               download="Keerthisha_Resume.pdf"
               className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-900 text-slate-300 border border-white/10 font-mono text-xs"
             >

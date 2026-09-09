@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PORTFOLIO_DATA } from '@/data/portfolioData';
+import { getAssetUrl } from '@/utils/assets';
 import { Modal } from '@/components/ui/Modal';
 import { Badge } from '@/components/ui/Badge';
 import { Linkedin, Github } from '@/components/ui/Icons';
@@ -53,34 +54,44 @@ export const RecruiterDrawer: React.FC<RecruiterDrawerProps> = ({
       maxWidth="3xl"
     >
       <div className="space-y-6">
-        {/* Candidate Top Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-xl bg-gradient-to-r from-slate-900 via-slate-900/90 to-indigo-950/40 border border-white/10">
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-2xl font-bold font-mono text-white tracking-tight">
-                {PORTFOLIO_DATA.personal.name}
-              </h2>
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" title="Active Candidate" />
+        {/* Candidate Top Header with Photo */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 p-5 rounded-xl bg-gradient-to-r from-slate-900 via-slate-900/90 to-indigo-950/40 border border-white/10">
+          <div className="flex items-start sm:items-center gap-4">
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-cyan-400/50 shadow-[0_0_20px_rgba(56,189,248,0.3)] shrink-0 bg-slate-950">
+              <img
+                src={getAssetUrl(PORTFOLIO_DATA.personal.profileImage || '')}
+                alt={PORTFOLIO_DATA.personal.name}
+                className="w-full h-full object-cover object-top"
+              />
+              <span className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-emerald-400 border-2 border-slate-900" title="Active Candidate" />
             </div>
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-xs text-slate-300 font-mono">
-              <span className="flex items-center gap-1 text-cyan-300">
-                <GraduationCap className="w-3.5 h-3.5" />
-                B.Tech Information Technology (2023 – 2027)
-              </span>
-              <span className="flex items-center gap-1 text-slate-400">
-                <MapPin className="w-3.5 h-3.5" />
-                {PORTFOLIO_DATA.personal.location}
-              </span>
+
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl sm:text-2xl font-bold font-mono text-white tracking-tight">
+                  {PORTFOLIO_DATA.personal.name}
+                </h2>
+              </div>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-xs text-slate-300 font-mono">
+                <span className="flex items-center gap-1 text-cyan-300">
+                  <GraduationCap className="w-3.5 h-3.5" />
+                  B.Tech IT (2023 – 2027)
+                </span>
+                <span className="flex items-center gap-1 text-slate-400">
+                  <MapPin className="w-3.5 h-3.5" />
+                  {PORTFOLIO_DATA.personal.location}
+                </span>
+              </div>
+              <p className="mt-2 text-xs text-slate-400 max-w-xl">
+                {PORTFOLIO_DATA.personal.summary}
+              </p>
             </div>
-            <p className="mt-2 text-xs text-slate-400 max-w-xl">
-              {PORTFOLIO_DATA.personal.summary}
-            </p>
           </div>
 
           {/* Quick Action Buttons */}
           <div className="flex flex-row sm:flex-col gap-2 shrink-0">
             <a
-              href={PORTFOLIO_DATA.personal.resumePdf}
+              href={getAssetUrl(PORTFOLIO_DATA.personal.resumePdf)}
               download="Keerthisha_Resume.pdf"
               className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-semibold font-mono text-xs shadow-lg hover:shadow-cyan-500/25 transition-all text-center"
             >

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Certificate } from '@/data/certificationsData';
+import { getAssetUrl } from '@/utils/assets';
 import { Modal } from '@/components/ui/Modal';
 import { Badge } from '@/components/ui/Badge';
 import { ExternalLink, CheckCircle, Calendar, Hash, Award, ShieldCheck } from 'lucide-react';
@@ -28,7 +29,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         {/* Certificate Image Frame */}
         <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-slate-950/80 shadow-2xl p-2 sm:p-4">
           <img
-            src={certificate.previewImage}
+            src={getAssetUrl(certificate.previewImage)}
             alt={`${certificate.title} Certificate`}
             className="w-full h-auto rounded-xl object-contain max-h-[500px] mx-auto shadow-lg"
           />

@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { CERTIFICATES_DATA, Certificate } from '@/data/certificationsData';
+import { getAssetUrl } from '@/utils/assets';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Badge } from '@/components/ui/Badge';
 import { Search, ExternalLink, ShieldCheck, Eye, Sparkles, Filter } from 'lucide-react';
@@ -95,7 +96,7 @@ export const CertificationsSection: React.FC<CertificationsSectionProps> = ({
                   {/* Certificate Image Preview */}
                   <div className="relative h-44 bg-slate-950 overflow-hidden border-b border-white/[0.08]">
                     <img
-                      src={cert.previewImage}
+                      src={getAssetUrl(cert.previewImage)}
                       alt={cert.title}
                       className="w-full h-full object-cover object-top opacity-90 group-hover:scale-105 group-hover:opacity-100 transition-all duration-300"
                     />

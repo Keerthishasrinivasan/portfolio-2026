@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { askKeerthishaAI } from '@/utils/aiEngine';
+import { PORTFOLIO_DATA } from '@/data/portfolioData';
+import { getAssetUrl } from '@/utils/assets';
 import {
   Sparkles,
   MessageSquare,
@@ -145,8 +147,13 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({ onNavigateToSection })
           {/* Header */}
           <div className="p-4 border-b border-white/[0.08] bg-black/40 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-500 to-indigo-600 flex items-center justify-center shadow-[0_0_12px_rgba(56,189,248,0.3)]">
-                <Bot className="w-4 h-4 text-black" />
+              <div className="relative w-9 h-9 rounded-xl overflow-hidden border border-cyan-400/40 shadow-[0_0_12px_rgba(56,189,248,0.3)] shrink-0 bg-slate-900">
+                <img
+                  src={getAssetUrl(PORTFOLIO_DATA.personal.profileImage || '')}
+                  alt={PORTFOLIO_DATA.personal.name}
+                  className="w-full h-full object-cover object-top"
+                />
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-slate-900" />
               </div>
               <div>
                 <h3 className="text-xs font-mono font-bold text-white flex items-center gap-1.5">

@@ -3,6 +3,7 @@ import { PORTFOLIO_DATA } from '@/data/portfolioData';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Badge } from '@/components/ui/Badge';
 import { Modal } from '@/components/ui/Modal';
+import { getAssetUrl } from '@/utils/assets';
 import {
   Trophy,
   Zap,
@@ -104,7 +105,7 @@ export const AchievementsSection: React.FC = () => {
                           className="relative h-24 rounded-lg overflow-hidden border border-cyan-500/30 group/photo cursor-pointer bg-slate-950"
                         >
                           <img
-                            src={photo.url}
+                            src={getAssetUrl(photo.url)}
                             alt={photo.caption}
                             className="w-full h-full object-cover group-hover/photo:scale-110 transition-transform duration-300"
                           />
@@ -164,7 +165,7 @@ export const AchievementsSection: React.FC = () => {
               >
                 <div className="h-48 overflow-hidden relative">
                   <img
-                    src={photo.url}
+                    src={getAssetUrl(photo.url)}
                     alt={photo.caption}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
@@ -199,7 +200,7 @@ export const AchievementsSection: React.FC = () => {
             <div className="space-y-4">
               <div className="rounded-xl overflow-hidden border border-white/10 bg-black flex items-center justify-center max-h-[600px]">
                 <img
-                  src={activePhoto.url}
+                  src={getAssetUrl(activePhoto.url)}
                   alt={activePhoto.caption}
                   className="w-full h-auto max-h-[580px] object-contain mx-auto"
                 />
