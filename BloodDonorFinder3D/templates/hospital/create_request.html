@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Create Blood Request | Blood Donor Finder{% endblock %}
+
+{% block content %}
+<div style="max-width: 680px; margin: 0 auto;">
+  <div style="margin-bottom: 2rem;">
+    <span class="badge badge-normal" style="margin-bottom: 0.5rem;">Hospital Portal</span>
+    <h1 style="font-size: 2rem; font-weight: 800; color: var(--dark);">
+      Post New Blood Requirement
+    </h1>
+    <p style="color: var(--text-muted);">
+      Broadcast an immediate blood need to compatible voluntary donors across the region.
+    </p>
+  </div>
+
+  <div class="card" style="padding: 2.25rem 2rem;">
+    <form method="POST" action="{{ url_for('hospital.create_request') }}">
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="blood_group" class="form-label">Required Blood Group *</label>
+          <select id="blood_group" name="blood_group" class="form-control" style="font-weight: 700;" required>
+            {% for bg in blood_groups %}
+              <option value="{{ bg }}">{{ bg }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="units_required" class="form-label">Whole Blood Units Needed *</label>
+          <input type="number" id="units_required" name="units_required" class="form-control" min="1" max="20" value="1" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Emergency Priority Level *</label>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem;">
+          <label style="border: 2px solid var(--border); border-radius: var(--radius-md); padding: 0.75rem; text-align: center; cursor: pointer;">
+            <input type="radio" name="emergency_level" value="Normal" checked>
+            <div style="font-weight: 700; color: #059669; margin-top: 0.25rem;">Normal</div>
+            <small style="font-size: 0.75rem; color: var(--text-muted);">Routine / Scheduled</small>
+          </label>
+
+          <label style="border: 2px solid var(--border); border-radius: var(--radius-md); padding: 0.75rem; text-align: center; cursor: pointer;">
+            <input type="radio" name="emergency_level" value="Urgent">
+            <div style="font-weight: 700; color: #d97706; margin-top: 0.25rem;">Urgent</div>
+            <small style="font-size: 0.75rem; color: var(--text-muted);">Within 24-48 hours</small>
+          </label>
+
+          <label style="border: 2px solid var(--border); border-radius: var(--radius-md); padding: 0.75rem; text-align: center; cursor: pointer; border-color: #fca5a5;">
+            <input type="radio" name="emergency_level" value="Critical">
+            <div style="font-weight: 700; color: #dc2626; margin-top: 0.25rem;">🚨 Critical</div>
+            <small style="font-size: 0.75rem; color: var(--text-muted);">Immediate / Trauma</small>
+          </label>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="city" class="form-label">City *</label>
+          <input type="text" id="city" name="city" class="form-control" value="{{ hospital.city }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="required_date" class="form-label">Target Date Needed</label>
+          <input type="date" id="required_date" name="required_date" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="location" class="form-label">Hospital Ward / Specific Dept</label>
+        <input type="text" id="location" name="location" class="form-control" placeholder="e.g. ICU Wing 3, Emergency Room B">
+      </div>
+
+      <div class="form-group">
+        <label for="description" class="form-label">Clinical Context & Instructions</label>
+        <textarea id="description" name="description" class="form-control" rows="3" placeholder="Specify surgical requirement, patient condition, or direct contact instructions for the arriving donor."></textarea>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button type="submit" class="btn btn-primary" style="flex: 1; padding: 0.85rem;">
+          📢 Broadcast Blood Request
+        </button>
+        <a href="{{ url_for('hospital.dashboard') }}" class="btn btn-outline">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

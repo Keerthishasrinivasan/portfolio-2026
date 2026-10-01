@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}About & Eligibility Guidelines | Blood Donor Finder{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+  <div style="text-align: center; margin-bottom: 3rem;">
+    <span class="badge badge-normal" style="margin-bottom: 0.5rem;">Mission & Guidelines</span>
+    <h1 style="font-size: 2.75rem; font-weight: 900; color: var(--dark); margin-bottom: 1rem;">
+      Bridging the Blood Gap With Technology
+    </h1>
+    <p style="font-size: 1.15rem; color: var(--text-muted); line-height: 1.6;">
+      Blood Donor Finder was designed as a final-year B.Tech IT capstone project to address real-world blood supply chain bottlenecks through intelligent matching and immediate emergency broadcast.
+    </p>
+  </div>
+
+  <div class="card" style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--dark); margin-bottom: 1rem;">
+      🎯 The Problem We Solve
+    </h2>
+    <p style="color: var(--text-main); font-size: 1rem; line-height: 1.7; margin-bottom: 1rem;">
+      During trauma emergencies, surgeries, oncology protocols, and maternal crises, patients frequently require specific blood group units within minutes. Traditional blood bank registries are often fragmented, phone chains are slow, and compatibility mistakes can be life-threatening.
+    </p>
+    <p style="color: var(--text-main); font-size: 1rem; line-height: 1.7;">
+      Our platform provides real-time availability toggles, automated algorithmic red blood cell matching, priority alerts for critical situations, and an audit trail of completed donations.
+    </p>
+  </div>
+
+  <div class="card" style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--dark); margin-bottom: 1.25rem;">
+      🩸 Who Can Donate Blood? (General Eligibility)
+    </h2>
+    <div class="grid-2" style="gap: 1.5rem;">
+      <div style="background: var(--surface-alt); padding: 1.25rem; border-radius: var(--radius-md);">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #065f46; margin-bottom: 0.5rem;">
+          ✅ You Are Eligible If:
+        </h3>
+        <ul style="padding-left: 1.25rem; font-size: 0.9rem; color: var(--text-main); line-height: 1.6;">
+          <li>You are between 18 and 65 years old.</li>
+          <li>You weigh at least 50 kg (110 lbs).</li>
+          <li>At least 90 days have elapsed since your last whole blood donation.</li>
+          <li>Your hemoglobin level is at least 12.5 g/dL.</li>
+          <li>You are in good general health on the day of donation.</li>
+        </ul>
+      </div>
+
+      <div style="background: var(--surface-alt); padding: 1.25rem; border-radius: var(--radius-md);">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #991b1b; margin-bottom: 0.5rem;">
+          ❌ Temporary Deferrals:
+        </h3>
+        <ul style="padding-left: 1.25rem; font-size: 0.9rem; color: var(--text-main); line-height: 1.6;">
+          <li>Recent tattoo or body piercing (within 6 months).</li>
+          <li>Currently taking antibiotics or active infection.</li>
+          <li>Recent major surgery or dental extraction.</li>
+          <li>Pregnancy or breast-feeding within the last 6 months.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer-card">
+    <span style="font-size: 1.5rem;">⚖️</span>
+    <div>
+      <h4 style="font-weight: 700; margin-bottom: 0.25rem; color: var(--dark);">Important Medical & Academic Disclaimer</h4>
+      <p>{{ disclaimer }}</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

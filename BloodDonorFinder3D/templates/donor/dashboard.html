@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Donor Dashboard | Blood Donor Finder{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-normal" style="margin-bottom: 0.5rem;">Donor Portal</span>
+      <h1 style="font-size: 2.25rem; font-weight: 800; color: var(--dark);">
+        Welcome, {{ user.name }}
+      </h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Blood Group: <strong style="color: var(--primary);">{{ donor.blood_group }}</strong> • Location: <strong>{{ donor.city }}</strong>
+      </p>
+    </div>
+
+    <!-- Real-Time Availability Toggle Form -->
+    <form method="POST" action="{{ url_for('donor.toggle_availability') }}">
+      <button type="submit" class="btn {% if donor.availability %}btn-primary{% else %}btn-outline{% endif %}">
+        {% if donor.availability %}
+          ● Status: Available to Donate (Click to Pause)
+        {% else %}
+          ○ Status: Currently Paused (Click to Activate)
+        {% endif %}
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Key Donor Metrics -->
+<div class="grid-4" style="margin-bottom: 2.5rem;">
+  <div class="card">
+    <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Total Donations</span>
+    <h3 style="font-size: 2rem; font-weight: 800; color: var(--dark); margin-top: 0.25rem;">{{ total_donations }}</h3>
+    <small style="color: #059669; font-weight: 600;">Verified life-saving units</small>
+  </div>
+
+  <div class="card">
+    <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Compatible Requests</span>
+    <h3 style="font-size: 2rem; font-weight: 800; color: var(--dark); margin-top: 0.25rem;">{{ pending_matching_count }}</h3>
+    <small style="color: var(--text-muted);">Active in system</small>
+  </div>
+
+  <div class="card">
+    <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Emergency Alerts</span>
+    <h3 style="font-size: 2rem; font-weight: 800; color: var(--critical); margin-top: 0.25rem;">{{ emergency_matching_count }}</h3>
+    <small style="color: var(--critical); font-weight: 600;">Urgent/Critical requirements</small>
+  </div>
+
+  <div class="card">
+    <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Medical Eligibility</span>
+    <div style="margin-top: 0.5rem;">
+      {% if donor.is_eligible_to_donate %}
+        <span class="badge badge-normal" style="font-size: 0.85rem; padding: 0.4rem 0.75rem;">Eligible Now</span>
+      {% else %}
+        <span class="badge badge-urgent" style="font-size: 0.85rem; padding: 0.4rem 0.75rem;">
+          Wait: {{ donor.days_until_eligible }} Days
+        </span>
+      {% endif %}
+    </div>
+    <small style="color: var(--text-muted); display: block; margin-top: 0.4rem;">90-day cooldown period</small>
+  </div>
+</div>
+
+<!-- Navigation Links -->
+<div style="display: flex; gap: 0.75rem; margin-bottom: 2rem; flex-wrap: wrap;">
+  <a href="{{ url_for('donor.requests') }}" class="btn btn-sm btn-outline">View All Blood Requests</a>
+  <a href="{{ url_for('donor.history') }}" class="btn btn-sm btn-outline">Donation History</a>
+  <a href="{{ url_for('donor.profile') }}" class="btn btn-sm btn-outline">Edit Profile Details</a>
+</div>
+
+<!-- Active Compatible Requests -->
+<div class="card" style="margin-bottom: 2.5rem;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+    <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--dark);">
+      Active Blood Requests Matching Your Blood Group ({{ donor.blood_group }})
+    </h2>
+    <a href="{{ url_for('donor.requests') }}" style="font-size: 0.88rem; font-weight: 600;">View All &rarr;</a>
+  </div>
+
+  {% if active_requests %}
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Hospital</th>
+            <th>Required Type</th>
+            <th>Units</th>
+            <th>Urgency</th>
+            <th>City</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for req in active_requests %}
+            <tr>
+              <td>
+                <strong>{{ req.hospital.hospital_name }}</strong>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">{{ req.location or req.city }}</div>
+              </td>
+              <td><span class="blood-type-badge" style="width: 36px; height: 36px; font-size: 0.95rem;">{{ req.blood_group }}</span></td>
+              <td><strong>{{ req.units_required }}</strong></td>
+              <td>
+                <span class="badge {% if req.emergency_level == 'Critical' %}badge-critical{% elif req.emergency_level == 'Urgent' %}badge-urgent{% else %}badge-normal{% endif %}">
+                  {{ req.emergency_level }}
+                </span>
+              </td>
+              <td>{{ req.city }}</td>
+              <td>
+                <form method="POST" action="{{ url_for('donor.respond_request', request_id=req.id) }}" style="display: inline-block;">
+                  <input type="hidden" name="action" value="accept">
+                  <button type="submit" class="btn btn-sm btn-primary">
+                    Accept Request
+                  </button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p style="color: var(--text-muted); text-align: center; padding: 2rem 0;">
+      No active blood requests require your blood group at this moment. You will be alerted when a hospital broadcasts a requirement.
+    </p>
+  {% endif %}
+</div>
+
+<!-- Recent Donation History -->
+<div class="card">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+    <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--dark);">
+      Recent Donation History
+    </h2>
+    <a href="{{ url_for('donor.history') }}" style="font-size: 0.88rem; font-weight: 600;">Full Records &rarr;</a>
+  </div>
+
+  {% if recent_donations %}
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Hospital / Medical Center</th>
+            <th>Units Donated</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in recent_donations %}
+            <tr>
+              <td>{{ d.donation_date.strftime('%B %d, %Y') }}</td>
+              <td>{{ d.blood_request.hospital.hospital_name if d.blood_request else 'General Voluntary Drive' }}</td>
+              <td><strong>{{ d.units_donated }} Unit(s)</strong></td>
+              <td>
+                <span class="badge {% if d.status == 'Completed' %}badge-normal{% else %}badge-urgent{% endif %}">
+                  {{ d.status }}
+                </span>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p style="color: var(--text-muted); text-align: center; padding: 2rem 0;">
+      No donations recorded yet. When you accept an emergency or routine request, it will be catalogued here.
+    </p>
+  {% endif %}
+</div>
+{% endblock %}

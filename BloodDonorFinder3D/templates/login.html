@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Account Login | Blood Donor Finder{% endblock %}
+
+{% block content %}
+<div style="max-width: 480px; margin: 2rem auto;">
+  <div class="card" style="padding: 2.5rem 2rem;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <span class="blood-type-badge" style="width: 52px; height: 52px; font-size: 1.5rem; margin-bottom: 1rem;">
+        🔐
+      </span>
+      <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--dark);">Welcome Back</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Sign in to your Donor, Hospital, or Administrator account
+      </p>
+    </div>
+
+    <!-- Quick Demo Credential Helper -->
+    <div style="background: var(--surface-alt); border: 1px dashed var(--border); border-radius: var(--radius-md); padding: 0.85rem 1rem; margin-bottom: 1.75rem;">
+      <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+        ⚡ Instant Demo Logins (Click to autofill):
+      </span>
+      <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
+        <button type="button" class="btn btn-sm btn-outline" style="background: white;" onclick="fillLogin('admin@blooddonor.org', 'Admin@123')">
+          👑 Admin
+        </button>
+        <button type="button" class="btn btn-sm btn-outline" style="background: white;" onclick="fillLogin('metro@hospital.org', 'Hospital@123')">
+          🏥 Hospital
+        </button>
+        <button type="button" class="btn btn-sm btn-outline" style="background: white;" onclick="fillLogin('alex.hayes@example.com', 'Donor@123')">
+          🩸 Donor (O-)
+        </button>
+      </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('auth.login', next=request.args.get('next')) }}">
+      <div class="form-group">
+        <label for="email" class="form-label">Email Address</label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="name@example.com" value="{{ email or '' }}" required autofocus>
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" style="padding: 0.85rem; font-size: 1rem; margin-top: 1rem;">
+        Sign In to Account
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.9rem; color: var(--text-muted);">
+      Don't have an account yet?
+      <a href="{{ url_for('auth.register') }}" style="font-weight: 700; color: var(--primary);">
+        Register here
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function fillLogin(email, password) {
+    document.getElementById('email').value = email;
+    document.getElementById('password').value = password;
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}All Blood Requests | System Admin{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-normal" style="margin-bottom: 0.5rem;">System Oversight</span>
+      <h1 style="font-size: 2.25rem; font-weight: 800; color: var(--dark);">
+        All System Blood Requests
+      </h1>
+      <p style="color: var(--text-muted);">
+        Comprehensive live feed of all blood requirements requested across all hospital facilities.
+      </p>
+    </div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-sm btn-outline">
+      &larr; Back to Dashboard
+    </a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Hospital Name</th>
+          <th>Blood Group</th>
+          <th>Units</th>
+          <th>Emergency Level</th>
+          <th>City</th>
+          <th>Location / Ward</th>
+          <th>Status</th>
+          <th>Created Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for req in requests %}
+          <tr>
+            <td>#{{ req.id }}</td>
+            <td><strong>{{ req.hospital.hospital_name }}</strong></td>
+            <td><span class="blood-type-badge" style="width: 36px; height: 36px; font-size: 0.95rem;">{{ req.blood_group }}</span></td>
+            <td><strong>{{ req.units_required }}</strong></td>
+            <td>
+              <span class="badge {% if req.emergency_level == 'Critical' %}badge-critical{% elif req.emergency_level == 'Urgent' %}badge-urgent{% else %}badge-normal{% endif %}">
+                {{ req.emergency_level }}
+              </span>
+            </td>
+            <td>{{ req.city }}</td>
+            <td>{{ req.location or req.city }}</td>
+            <td>
+              <span class="badge {% if req.status == 'Completed' %}badge-normal{% elif req.status == 'Accepted' %}badge-urgent{% elif req.status == 'Cancelled' %}badge-unavailable{% else %}badge-normal{% endif %}">
+                {{ req.status }}
+              </span>
+            </td>
+            <td><small>{{ req.created_at.strftime('%b %d, %Y') }}</small></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

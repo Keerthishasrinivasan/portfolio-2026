@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Blood Donor Finder | Every Drop Can Save a Life{% endblock %}</title>
+  
+  <!-- Favicon icon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩸</text></svg>">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  
+  <!-- Three.js from CDN for 3D visual elements -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('main.index') }}" class="brand-logo">
+        <span class="drop-icon"></span>
+        <span>Blood<span class="brand-highlight">Finder</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li class="nav-item"><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li class="nav-item"><a href="{{ url_for('main.find_donor') }}">Find Donor</a></li>
+        <li class="nav-item emergency"><a href="{{ url_for('main.emergency') }}">🚨 Emergency</a></li>
+        <li class="nav-item"><a href="{{ url_for('main.about') }}">About</a></li>
+      </ul>
+
+      <div class="nav-auth">
+        {% if current_user %}
+          <!-- Role Dashboard Link -->
+          {% if current_role == 'donor' %}
+            <a href="{{ url_for('donor.dashboard') }}" class="btn btn-sm btn-outline">Donor Panel</a>
+          {% elif current_role == 'hospital' %}
+            <a href="{{ url_for('hospital.dashboard') }}" class="btn btn-sm btn-outline">Hospital Portal</a>
+          {% elif current_role == 'admin' %}
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-sm btn-outline">Admin Panel</a>
+          {% endif %}
+
+          <!-- Notification Bell -->
+          <div class="nav-notifications">
+            <button class="notif-bell-btn" id="notifBellBtn" title="Notifications">
+              🔔
+              {% if unread_notifications_count > 0 %}
+                <span class="notif-badge">{{ unread_notifications_count }}</span>
+              {% endif %}
+            </button>
+
+            <div class="notif-dropdown" id="notifDropdown">
+              <div class="notif-header">
+                <span>Notifications</span>
+                <small>{{ unread_notifications_count }} unread</small>
+              </div>
+              <div class="notif-list">
+                {% if current_user.notifications.limit(6).all() %}
+                  {% for notif in current_user.notifications.limit(6).all() %}
+                    <div class="notif-item {% if not notif.is_read %}unread{% endif %}" onclick="markNotificationRead({{ notif.id }}, this)">
+                      <div>{{ notif.message }}</div>
+                      <small style="color: var(--text-muted); font-size: 0.75rem;">{{ notif.created_at.strftime('%b %d, %H:%M') }}</small>
+                    </div>
+                  {% endfor %}
+                {% else %}
+                  <div style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+                    No notifications yet.
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <a href="{{ url_for('auth.logout') }}" class="btn btn-sm btn-outline" style="color: var(--critical); border-color: #fecaca;">Logout</a>
+
+        {% else %}
+          <a href="{{ url_for('auth.login') }}" class="btn btn-sm btn-outline">Login</a>
+          <a href="{{ url_for('auth.register') }}" class="btn btn-sm btn-primary">Join Network</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <!-- Flash Messages Banner -->
+  <div class="flash-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            <span>{{ message }}</span>
+            <button onclick="this.parentElement.remove()" style="background: none; border: none; font-size: 1.1rem; cursor: pointer; color: inherit;">&times;</button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Main Content Body -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div class="brand-logo" style="color: white; margin-bottom: 1rem;">
+          <span class="drop-icon"></span>
+          <span>Blood<span class="brand-highlight">Finder</span></span>
+        </div>
+        <p style="font-size: 0.9rem; line-height: 1.6; max-width: 320px;">
+          An intelligent digital bridge connecting voluntary blood donors and medical centers during normal and critical life-saving emergencies.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="{{ url_for('main.index') }}">Home</a></li>
+          <li><a href="{{ url_for('main.find_donor') }}">Find a Donor</a></li>
+          <li><a href="{{ url_for('main.emergency') }}">Emergency Requests</a></li>
+          <li><a href="{{ url_for('main.about') }}">About & Guidelines</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Portals</h4>
+        <ul class="footer-links">
+          <li><a href="{{ url_for('auth.register', role='donor') }}">Register as Donor</a></li>
+          <li><a href="{{ url_for('auth.register', role='hospital') }}">Register Hospital</a></li>
+          <li><a href="{{ url_for('auth.login') }}">Account Login</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Medical Safety</h4>
+        <p style="font-size: 0.82rem; line-height: 1.5; color: #94a3b8;">
+          Blood compatibility charts reflect standard ABO/Rh guidelines. Transfusions require clinical cross-matching by certified healthcare professionals.
+        </p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 Blood Donor Finder Platform. Developed for B.Tech IT Final-Year Portfolio & Placements.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

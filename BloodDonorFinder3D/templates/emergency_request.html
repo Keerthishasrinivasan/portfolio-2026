@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Emergency Blood Broadcasts | Blood Donor Finder{% endblock %}
+
+{% block extra_css %}
+<style>
+  .emergency-header-banner {
+    background: linear-gradient(135deg, #991b1b 0%, #dc2626 100%);
+    color: white;
+    border-radius: var(--radius-xl);
+    padding: 3rem 2rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 10px 30px rgba(220, 38, 38, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="emergency-header-banner">
+  <div style="max-width: 700px;">
+    <span class="badge" style="background: rgba(255,255,255,0.2); color: white; margin-bottom: 0.75rem;">
+      🚨 High-Priority Emergency Triage
+    </span>
+    <h1 style="font-size: 2.5rem; font-weight: 900; line-height: 1.2; margin-bottom: 0.75rem;">
+      Live Emergency Blood Requests
+    </h1>
+    <p style="font-size: 1.05rem; opacity: 0.9; margin-bottom: 1.5rem;">
+      Urgent and critical requirements broadcasted directly by medical emergency wings and trauma centers.
+    </p>
+
+    {% if current_role == 'hospital' %}
+      <a href="{{ url_for('hospital.create_request') }}" class="btn btn-sm" style="background: white; color: var(--primary); font-weight: 700;">
+        + Post New Emergency Request
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+<div style="margin-bottom: 1.5rem;">
+  <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--dark);">
+    Active Emergency Queue ({{ requests|length }})
+  </h2>
+</div>
+
+{% if requests %}
+  <div class="grid-2">
+    {% for req in requests %}
+      <div class="card" style="border-left: 6px solid {% if req.emergency_level == 'Critical' %}#ef4444{% else %}#f59e0b{% endif %};">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div class="blood-type-badge">{{ req.blood_group }}</div>
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--dark);">
+                {{ req.hospital.hospital_name }}
+              </h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                📍 {{ req.location or req.city }}, {{ req.city }}
+              </p>
+            </div>
+          </div>
+
+          <span class="badge {% if req.emergency_level == 'Critical' %}badge-critical{% else %}badge-urgent{% endif %}">
+            {{ req.emergency_level }}
+          </span>
+        </div>
+
+        <div style="background: var(--surface-alt); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+            <span>Units Required:</span>
+            <strong>{{ req.units_required }} Whole Blood Unit(s)</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+            <span>Needed By:</span>
+            <strong>{{ req.required_date.strftime('%B %d, %Y') if req.required_date else 'Immediate / Stat' }}</strong>
+          </div>
+          {% if req.description %}
+            <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--text-main);">
+              <strong>Clinical Context:</strong> {{ req.description }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div style="display: flex; gap: 0.75rem;">
+          <a href="tel:{{ req.hospital.phone }}" class="btn btn-sm btn-outline" style="flex: 1;">
+            📞 Call Hospital ({{ req.hospital.phone }})
+          </a>
+
+          {% if current_user and current_role == 'donor' %}
+            <form method="POST" action="{{ url_for('donor.respond_request', request_id=req.id) }}" style="flex: 1;">
+              <input type="hidden" name="action" value="accept">
+              <button type="submit" class="btn btn-sm btn-primary btn-block">
+                ❤️ I Can Donate
+              </button>
+            </form>
+          {% elif not current_user %}
+            <a href="{{ url_for('auth.login', next=request.path) }}" class="btn btn-sm btn-primary" style="flex: 1;">
+              Sign In to Respond
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="card" style="text-align: center; padding: 3.5rem 2rem;">
+    <span style="font-size: 3rem; margin-bottom: 1rem; display: inline-block;">✅</span>
+    <h3 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 0.5rem;">No Critical Emergencies Active</h3>
+    <p style="color: var(--text-muted); max-width: 460px; margin: 0 auto 1.5rem;">
+      Currently, all emergency blood reserves in our registered medical centers are stable.
+    </p>
+    <a href="{{ url_for('main.find_donor') }}" class="btn btn-outline">
+      Browse General Donor Directory
+    </a>
+  </div>
+{% endif %}
+
+<div class="disclaimer-card" style="margin-top: 3rem;">
+  <span>ℹ️</span>
+  <div>{{ disclaimer }}</div>
+</div>
+{% endblock %}

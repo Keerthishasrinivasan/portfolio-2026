@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Hospitals | System Admin{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-normal" style="margin-bottom: 0.5rem;">Accreditation</span>
+      <h1 style="font-size: 2.25rem; font-weight: 800; color: var(--dark);">
+        Hospital Verification Center
+      </h1>
+      <p style="color: var(--text-muted);">
+        Review hospital registrations and toggle verified status to allow trusted blood request broadcasts.
+      </p>
+    </div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-sm btn-outline">
+      &larr; Back to Dashboard
+    </a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Hospital Name</th>
+          <th>Contact Person</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>City</th>
+          <th>Address</th>
+          <th>Verification Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for h in hospitals %}
+          <tr>
+            <td><strong>{{ h.hospital_name }}</strong></td>
+            <td>{{ h.contact_person or 'N/A' }}</td>
+            <td>{{ h.user.email if h.user else 'N/A' }}</td>
+            <td>{{ h.phone }}</td>
+            <td>{{ h.city }}</td>
+            <td><small>{{ h.address }}</small></td>
+            <td>
+              <span class="badge {% if h.verified %}badge-normal{% else %}badge-urgent{% endif %}">
+                {% if h.verified %}✓ Verified{% else %}⏳ Unverified{% endif %}
+              </span>
+            </td>
+            <td>
+              <form method="POST" action="{{ url_for('admin.toggle_hospital_verify', hospital_id=h.id) }}">
+                <button type="submit" class="btn btn-sm {% if h.verified %}btn-outline{% else %}btn-primary{% endif %}" style="font-size: 0.8rem; padding: 0.3rem 0.65rem;">
+                  {% if h.verified %}Revoke Verification{% else %}Approve & Verify{% endif %}
+                </button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

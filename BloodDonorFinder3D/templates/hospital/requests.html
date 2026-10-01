@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Blood Requests | Blood Donor Finder{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-normal" style="margin-bottom: 0.5rem;">Request Management</span>
+      <h1 style="font-size: 2.25rem; font-weight: 800; color: var(--dark);">
+        Hospital Blood Requests
+      </h1>
+      <p style="color: var(--text-muted);">
+        Track progress, donor responses, and completion status of your medical facility's requests.
+      </p>
+    </div>
+    <a href="{{ url_for('hospital.create_request') }}" class="btn btn-primary">
+      + New Blood Request
+    </a>
+  </div>
+</div>
+
+<!-- Filter Tabs -->
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+  <a href="{{ url_for('hospital.requests', status='all') }}" class="btn btn-sm {% if current_filter == 'all' %}btn-primary{% else %}btn-outline{% endif %}">
+    All ({{ requests|length }})
+  </a>
+  <a href="{{ url_for('hospital.requests', status='Pending') }}" class="btn btn-sm {% if current_filter == 'Pending' %}btn-primary{% else %}btn-outline{% endif %}">
+    Pending
+  </a>
+  <a href="{{ url_for('hospital.requests', status='Accepted') }}" class="btn btn-sm {% if current_filter == 'Accepted' %}btn-primary{% else %}btn-outline{% endif %}">
+    Accepted
+  </a>
+  <a href="{{ url_for('hospital.requests', status='Completed') }}" class="btn btn-sm {% if current_filter == 'Completed' %}btn-primary{% else %}btn-outline{% endif %}">
+    Completed
+  </a>
+</div>
+
+<div class="card">
+  {% if requests %}
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Group</th>
+            <th>Units</th>
+            <th>Priority</th>
+            <th>Location</th>
+            <th>Required By</th>
+            <th>Status</th>
+            <th>Update Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for req in requests %}
+            <tr>
+              <td>#{{ req.id }}</td>
+              <td><span class="blood-type-badge" style="width: 36px; height: 36px; font-size: 0.95rem;">{{ req.blood_group }}</span></td>
+              <td><strong>{{ req.units_required }}</strong></td>
+              <td>
+                <span class="badge {% if req.emergency_level == 'Critical' %}badge-critical{% elif req.emergency_level == 'Urgent' %}badge-urgent{% else %}badge-normal{% endif %}">
+                  {{ req.emergency_level }}
+                </span>
+              </td>
+              <td>{{ req.location or req.city }}</td>
+              <td>{{ req.required_date.strftime('%b %d, %Y') if req.required_date else 'Immediate' }}</td>
+              <td>
+                <span class="badge {% if req.status == 'Completed' %}badge-normal{% elif req.status == 'Accepted' %}badge-urgent{% elif req.status == 'Cancelled' %}badge-unavailable{% else %}badge-normal{% endif %}">
+                  {{ req.status }}
+                </span>
+              </td>
+              <td>
+                <form method="POST" action="{{ url_for('hospital.update_request_status', request_id=req.id) }}" style="display: flex; gap: 0.35rem;">
+                  <select name="status" class="form-control" style="padding: 0.3rem 0.5rem; font-size: 0.8rem; width: 110px;">
+                    <option value="Pending" {% if req.status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="In Progress" {% if req.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                    <option value="Accepted" {% if req.status == 'Accepted' %}selected{% endif %}>Accepted</option>
+                    <option value="Completed" {% if req.status == 'Completed' %}selected{% endif %}>Completed</option>
+                    <option value="Cancelled" {% if req.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                  </select>
+                  <button type="submit" class="btn btn-sm btn-outline" style="padding: 0.3rem 0.6rem;">Save</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p style="color: var(--text-muted); text-align: center; padding: 3rem 0;">
+      No blood requests found under the "{{ current_filter }}" filter.
+    </p>
+  {% endif %}
+</div>
+{% endblock %}

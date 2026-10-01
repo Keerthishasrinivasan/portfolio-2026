@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Users | System Admin{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-normal" style="margin-bottom: 0.5rem;">User Directory</span>
+      <h1 style="font-size: 2.25rem; font-weight: 800; color: var(--dark);">
+        Manage System Accounts
+      </h1>
+      <p style="color: var(--text-muted);">
+        Inspect and manage account statuses across Donors, Hospitals, and Admins.
+      </p>
+    </div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-sm btn-outline">
+      &larr; Back to Dashboard
+    </a>
+  </div>
+</div>
+
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+  <a href="{{ url_for('admin.users', role='all') }}" class="btn btn-sm {% if current_role == 'all' %}btn-primary{% else %}btn-outline{% endif %}">
+    All ({{ users|length }})
+  </a>
+  <a href="{{ url_for('admin.users', role='donor') }}" class="btn btn-sm {% if current_role == 'donor' %}btn-primary{% else %}btn-outline{% endif %}">
+    Donors
+  </a>
+  <a href="{{ url_for('admin.users', role='hospital') }}" class="btn btn-sm {% if current_role == 'hospital' %}btn-primary{% else %}btn-outline{% endif %}">
+    Hospitals
+  </a>
+  <a href="{{ url_for('admin.users', role='admin') }}" class="btn btn-sm {% if current_role == 'admin' %}btn-primary{% else %}btn-outline{% endif %}">
+    Admins
+  </a>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Phone</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>Registered</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+          <tr>
+            <td>#{{ u.id }}</td>
+            <td><strong>{{ u.name }}</strong></td>
+            <td>{{ u.email }}</td>
+            <td>
+              <span class="badge {% if u.role == 'admin' %}badge-critical{% elif u.role == 'hospital' %}badge-urgent{% else %}badge-normal{% endif %}">
+                {{ u.role }}
+              </span>
+            </td>
+            <td>{{ u.phone }}</td>
+            <td>{{ u.location or 'N/A' }}</td>
+            <td>
+              <span class="badge {% if u.is_active %}badge-normal{% else %}badge-critical{% endif %}">
+                {% if u.is_active %}Active{% else %}Blocked{% endif %}
+              </span>
+            </td>
+            <td><small>{{ u.created_at.strftime('%b %d, %Y') }}</small></td>
+            <td>
+              {% if u.role != 'admin' %}
+                <form method="POST" action="{{ url_for('admin.toggle_user_active', user_id=u.id) }}">
+                  <button type="submit" class="btn btn-sm {% if u.is_active %}btn-outline{% else %}btn-primary{% endif %}" style="font-size: 0.78rem; padding: 0.25rem 0.5rem;">
+                    {% if u.is_active %}Block Account{% else %}Activate Account{% endif %}
+                  </button>
+                </form>
+              {% else %}
+                <small style="color: var(--text-muted);">Protected</small>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Donor Profile | Blood Donor Finder{% endblock %}
+
+{% block content %}
+<div style="max-width: 650px; margin: 0 auto;">
+  <div style="margin-bottom: 2rem;">
+    <span class="badge badge-normal" style="margin-bottom: 0.5rem;">Profile Settings</span>
+    <h1 style="font-size: 2rem; font-weight: 800; color: var(--dark);">
+      Edit Donor Profile
+    </h1>
+    <p style="color: var(--text-muted);">
+      Keep your contact coordinates and availability current for emergency hospital outreach.
+    </p>
+  </div>
+
+  <div class="card" style="padding: 2.25rem 2rem;">
+    <form method="POST" action="{{ url_for('donor.profile') }}">
+      <div class="form-group">
+        <label for="name" class="form-label">Full Name</label>
+        <input type="text" id="name" name="name" class="form-control" value="{{ user.name }}" required>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="email" class="form-label">Email (Account ID)</label>
+          <input type="email" id="email" class="form-control" value="{{ user.email }}" disabled style="background: var(--surface-alt); cursor: not-allowed;">
+        </div>
+        <div class="form-group">
+          <label for="phone" class="form-label">Phone Number *</label>
+          <input type="tel" id="phone" name="phone" class="form-control" value="{{ user.phone }}" required>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="form-group">
+          <label for="blood_group" class="form-label">Blood Group *</label>
+          <select id="blood_group" name="blood_group" class="form-control" style="font-weight: 700;">
+            {% for bg in blood_groups %}
+              <option value="{{ bg }}" {% if donor.blood_group == bg %}selected{% endif %}>{{ bg }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="age" class="form-label">Age</label>
+          <input type="number" id="age" name="age" class="form-control" min="18" max="65" value="{{ donor.age or '' }}">
+        </div>
+
+        <div class="form-group">
+          <label for="gender" class="form-label">Gender</label>
+          <select id="gender" name="gender" class="form-control">
+            <option value="Male" {% if donor.gender == 'Male' %}selected{% endif %}>Male</option>
+            <option value="Female" {% if donor.gender == 'Female' %}selected{% endif %}>Female</option>
+            <option value="Other" {% if donor.gender == 'Other' %}selected{% endif %}>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="city" class="form-label">City *</label>
+        <input type="text" id="city" name="city" class="form-control" value="{{ donor.city }}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="address" class="form-label">Street / Area Address</label>
+        <textarea id="address" name="address" class="form-control" rows="2">{{ donor.address or '' }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="last_donation_date" class="form-label">Last Donation Date</label>
+        <input type="date" id="last_donation_date" name="last_donation_date" class="form-control" value="{{ donor.last_donation_date.isoformat() if donor.last_donation_date else '' }}">
+        <small style="color: var(--text-muted);">Used to calculate your 90-day safe medical eligibility interval.</small>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button type="submit" class="btn btn-primary" style="flex: 1;">
+          Save Profile Updates
+        </button>
+        <a href="{{ url_for('donor.dashboard') }}" class="btn btn-outline">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Hospital Dashboard | Blood Donor Finder{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+        <span class="badge badge-normal">Hospital Portal</span>
+        {% if hospital.verified %}
+          <span class="badge" style="background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc;">✓ Verified Facility</span>
+        {% else %}
+          <span class="badge" style="background: #fef3c7; color: #92400e; border: 1px solid #fcd34d;">⏳ Verification Pending</span>
+        {% endif %}
+      </div>
+      <h1 style="font-size: 2.25rem; font-weight: 800; color: var(--dark);">
+        {{ hospital.hospital_name }}
+      </h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        📍 {{ hospital.address }}, {{ hospital.city }} • Contact: <strong>{{ hospital.phone }}</strong>
+      </p>
+    </div>
+
+    <div style="display: flex; gap: 0.75rem;">
+      <a href="{{ url_for('hospital.create_request') }}" class="btn btn-primary">
+        + Create Blood Request
+      </a>
+      <a href="{{ url_for('hospital.find_donors') }}" class="btn btn-outline">
+        🔍 Find Donors Directly
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Operational Statistics -->
+<div class="grid-4" style="margin-bottom: 2.5rem;">
+  <div class="card">
+    <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Total Requests</span>
+    <h3 style="font-size: 2rem; font-weight: 800; color: var(--dark); margin-top: 0.25rem;">{{ total_requests }}</h3>
+    <small style="color: var(--text-muted);">Cumulative requests</small>
+  </div>
+
+  <div class="card">
+    <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Active / Pending</span>
+    <h3 style="font-size: 2rem; font-weight: 800; color: var(--dark); margin-top: 0.25rem;">{{ active_requests }}</h3>
+    <small style="color: #0284c7; font-weight: 600;">Currently seeking donors</small>
+  </div>
+
+  <div class="card">
+    <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Emergency Triage</span>
+    <h3 style="font-size: 2rem; font-weight: 800; color: var(--critical); margin-top: 0.25rem;">{{ emergency_requests }}</h3>
+    <small style="color: var(--critical); font-weight: 600;">Urgent/Critical priority</small>
+  </div>
+
+  <div class="card">
+    <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Completed</span>
+    <h3 style="font-size: 2rem; font-weight: 800; color: #059669; margin-top: 0.25rem;">{{ completed_requests }}</h3>
+    <small style="color: #059669; font-weight: 600;">Units safely collected</small>
+  </div>
+</div>
+
+<!-- Recent Requests Management -->
+<div class="card" style="margin-bottom: 2.5rem;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+    <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--dark);">
+      Recent Blood Requests
+    </h2>
+    <a href="{{ url_for('hospital.requests') }}" style="font-size: 0.88rem; font-weight: 600;">All Requests &rarr;</a>
+  </div>
+
+  {% if recent_requests %}
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Units</th>
+            <th>Priority</th>
+            <th>Location / Ward</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for req in recent_requests %}
+            <tr>
+              <td>#{{ req.id }}</td>
+              <td><span class="blood-type-badge" style="width: 36px; height: 36px; font-size: 0.95rem;">{{ req.blood_group }}</span></td>
+              <td><strong>{{ req.units_required }}</strong></td>
+              <td>
+                <span class="badge {% if req.emergency_level == 'Critical' %}badge-critical{% elif req.emergency_level == 'Urgent' %}badge-urgent{% else %}badge-normal{% endif %}">
+                  {{ req.emergency_level }}
+                </span>
+              </td>
+              <td>{{ req.location or req.city }}</td>
+              <td>
+                <span class="badge {% if req.status == 'Completed' %}badge-normal{% elif req.status == 'Accepted' %}badge-urgent{% elif req.status == 'Cancelled' %}badge-unavailable{% else %}badge-normal{% endif %}">
+                  {{ req.status }}
+                </span>
+              </td>
+              <td><small>{{ req.created_at.strftime('%b %d, %H:%M') }}</small></td>
+              <td>
+                <form method="POST" action="{{ url_for('hospital.update_request_status', request_id=req.id) }}" style="display: flex; gap: 0.35rem;">
+                  <select name="status" class="form-control" style="padding: 0.3rem 0.5rem; font-size: 0.8rem; width: 110px;">
+                    <option value="Pending" {% if req.status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="In Progress" {% if req.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                    <option value="Accepted" {% if req.status == 'Accepted' %}selected{% endif %}>Accepted</option>
+                    <option value="Completed" {% if req.status == 'Completed' %}selected{% endif %}>Completed</option>
+                    <option value="Cancelled" {% if req.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                  </select>
+                  <button type="submit" class="btn btn-sm btn-outline" style="padding: 0.3rem 0.6rem;">Update</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p style="color: var(--text-muted); text-align: center; padding: 2rem 0;">
+      No blood requests created yet. Click "+ Create Blood Request" to post a normal or emergency requirement.
+    </p>
+  {% endif %}
+</div>
+
+<!-- Nearby Available Donors in Hospital's City -->
+<div class="card">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+    <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--dark);">
+      Registered Available Donors in {{ hospital.city }}
+    </h2>
+    <a href="{{ url_for('hospital.find_donors') }}" style="font-size: 0.88rem; font-weight: 600;">Search Registry &rarr;</a>
+  </div>
+
+  {% if nearby_donors %}
+    <div class="grid-3">
+      {% for donor in nearby_donors %}
+        <div style="background: var(--surface-alt); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <div class="blood-type-badge" style="width: 38px; height: 38px; font-size: 1rem;">{{ donor.blood_group }}</div>
+            <span class="badge badge-available">Available</span>
+          </div>
+          <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.2rem;">{{ donor.user.name }}</h4>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+            📍 {{ donor.city }} • {{ donor.user.phone }}
+          </p>
+          <a href="tel:{{ donor.user.phone }}" class="btn btn-sm btn-outline btn-block">
+            📞 Call Donor
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p style="color: var(--text-muted); text-align: center; padding: 2rem 0;">
+      No donors currently indexed in this city. Broaden your search via the Find Donors directory.
+    </p>
+  {% endif %}
+</div>
+{% endblock %}
