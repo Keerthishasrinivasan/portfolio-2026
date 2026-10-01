@@ -337,7 +337,7 @@ export const PORTFOLIO_DATA = {
       ],
       contribution:
         'Architected the entire full-stack application from scratch: designed the 6-table relational SQL schema, implemented PBKDF2 password hashing, developed the scientific blood matching engine, crafted the Three.js 3D hero visualization, and created role-based dashboards.',
-      githubUrl: 'https://github.com/Keerthishasrinivasan/portfolio-2026',
+      githubUrl: 'https://github.com/Keerthishasrinivasan/BloodDonorFinder3D',
       demoUrl: 'http://localhost:5000',
     },
   ] as Project[],
